@@ -15,12 +15,19 @@ document.addEventListener('DOMContentLoaded', () => {
 			console.log('------');
 
 			document.querySelector('#name').innerHTML = new_name;
-
 			// Save nickname in browser
 			localStorage.setItem('myNickname', new_name);
 
 			// Remove nickname form
 			document.querySelector('#new-name').remove();
+			setTimeout(function () {
+
+			// Will redirect to your blog page (an ex: blog.html)
+	        window.location.href = "chats";
+
+			// Will call the function after 2 secs.
+		}, 3000);
+
 			return false;
 		}
 	}
@@ -30,17 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		//
 		document.querySelector('#name').innerHTML = localStorage.getItem('myNickname');
-
 		// Remove nickname form
 		document.querySelector('#new-name').remove();
-
 		setTimeout(function () {
-
 		// Will redirect to your blog page (an ex: blog.html)
-        window.location.href = "chats.html";
+        window.location.href = "chats";
 
 		// Will call the function after 2 secs.
-    	}, 2000);
+	}, 3000);
 
 		return false;
 	}

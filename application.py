@@ -19,3 +19,7 @@ def connect(user):
 		abort(403)
 	else:
 		users.appent(user)
+
+@app.route("/chats", methods=["GET"])
+def chats():
+	return render_template("chats.html")

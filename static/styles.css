@@ -1,0 +1,72 @@
+main
+{
+    /* scroll horizontally as needed */
+    overflow-x: auto;
+
+    /* center contents */
+    text-align: center;
+
+}
+
+/* Chat containers */
+.container {
+  background-color: #505151;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+/* Darker chat container */
+.income {
+  border-color: #ccc;
+  background-color: #1dbb8d;
+}
+
+/* Clear floats */
+.container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+/* Style images */
+.container img {
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+/* Style the right image */
+.container img.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:0;
+}
+
+/* Style time text */
+.time-right {
+  font-size: 12px;
+  float: right;
+  color: #aaa;
+  padding-top: 25px;
+}
+
+/* Style time text */
+.time-left {
+  font-size: 12px;
+  float: left;
+  color: ##edf0f4;
+  padding-top: 25px;
+}
+
+/* Style messages left */
+.message-left {
+	text-align: left;
+}
+
+/* Style message right*/
+.message-right {
+	text-align: right;
+}
