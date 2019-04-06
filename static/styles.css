@@ -60,13 +60,3 @@ main
   color: ##edf0f4;
   padding-top: 25px;
 }
-
-/* Style messages left */
-.message-left {
-	text-align: left;
-}
-
-/* Style message right*/
-.message-right {
-	text-align: right;
-}
