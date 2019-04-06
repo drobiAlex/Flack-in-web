@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block js %}
+<script src="{{url_for('static',filename='index.js')}}">
+
+</script>
+{% endblock %}
+
+{% block title %}
+		Messenger
+{% endblock %}
+
+
+	{% block main %}
+		<h1 id="main">Hello: <span id="name"></span></h1>
+		<form id="new-name">
+			<input type="text" id="input_name">
+			<input type="submit">
+		</form>
+		<button onclick="clr()">Delete!</button>
+	{% endblock %}
