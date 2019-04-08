@@ -12,7 +12,7 @@ main
 .container {
   background-color: #505151;
   border-radius: 5px;
-  padding: 10px;
+  /*padding: 10px;*/
   margin: 10px 0;
 }
 
@@ -24,9 +24,9 @@ main
 
 /* Clear floats */
 .container::after {
-  content: "";
-  clear: both;
-  display: table;
+  /*content: "";*/
+  /*clear: both;*/
+  /*display: table;*/
 }
 
 /* Style images */
@@ -50,7 +50,7 @@ main
   font-size: 12px;
   float: right;
   color: #aaa;
-  padding-top: 25px;
+  /*padding-top: 25px;*/
 }
 
 /* Style time text */
@@ -58,5 +58,15 @@ main
   font-size: 12px;
   float: left;
   color: ##edf0f4;
-  padding-top: 25px;
+  /*padding-top: 25px;*/
+}
+
+.jumbotron {
+  position: absolute;
+  left: 0;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  border: 1px solid #333;
+  overflow-y: auto;
 }

@@ -13,13 +13,29 @@ users = []
 def index():
 	return render_template("index.html")
 
-@socketio.on("new_user")
-def connect(user):
-	if user not in users:
-		abort(403)
-	else:
-		users.appent(user)
 
 @app.route("/chats", methods=["GET"])
 def chats():
 	return render_template("chats.html")
+
+@app.route("/username", methods=["POST"])
+def username():
+
+
+	print("You are here!")
+
+	name = request.form.get('new_name')
+	print(f"Here is a name: {name}")
+
+	return render_template("chats.html")
+
+
+'''
+// Add new user to the chat
+
+// Open new request to get new posts.
+/*const request = new XMLHttpRequest();
+request.open('POST', '/posts');
+request.onload = () => {
+	const data = JSON.parse(request.responseText);
+	data.forEach(add_post);*/'''

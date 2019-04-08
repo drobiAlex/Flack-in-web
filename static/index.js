@@ -7,7 +7,15 @@ document.addEventListener('DOMContentLoaded', () => {
 		document.querySelector('#new-name').onsubmit = () => {
 
 			// Create a new variable with nickname from form
-			let new_name = document.querySelector('#input_name').value;
+			const new_name = document.querySelector('#input_name').value;
+
+			// Open new request to get new posts.
+            const request = new XMLHttpRequest();
+            request.open('POST', '/user');
+            request.onload = () => {
+                const data = JSON.parse(request.responseText);
+                data.forEach(add_post);
+            };
 
 			// Print output to the log
 			console.log('------');
@@ -19,14 +27,14 @@ document.addEventListener('DOMContentLoaded', () => {
 			localStorage.setItem('myNickname', new_name);
 
 			// Remove nickname form
-			document.querySelector('#new-name').remove();
+			/*document.querySelector('#new-name').remove();
 			setTimeout(function () {
 
 			// Will redirect to your blog page (an ex: blog.html)
 	        window.location.href = "chats";
 
 			// Will call the function after 2 secs.
-		}, 3000);
+		}, 2000);*/
 
 			return false;
 		}
