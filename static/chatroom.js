@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				console.log('-----');
 				console.log(message);
 				console.log('-----');
-                socket.emit('submit message', {'message': message});
+                socket.emit('send message', {'message': message});
 				return false;
         };
     });
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			li.innerHTML = data.selection;
 			console.log(li.innerHTML);
 
-			document.querySelector('#message').append(li);
+			document.querySelector('#message').append(li);p
 
 		}
 	});

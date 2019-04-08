@@ -4,7 +4,7 @@ import datetime
 from flask import Flask, render_template, session, request
 from flask_socketio import SocketIO, emit
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
-
+from channels import Channel
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
@@ -12,7 +12,6 @@ socketio = SocketIO(app)
 
 users = []
 chatlist = []
-messagedict = {}
 
 @app.route("/")
 def index():
@@ -32,6 +31,7 @@ def username():
 
 		name = request.form.get('input_name')
 
+		# just for me
 		print(f'User name: {name}')
 
 		# Check if username already not exist
@@ -60,7 +60,7 @@ def channel(chat_id):
 		chatname = request.form.get('chat_name')
 
 		print (f'Here is a chatname: {chatname}')
-		print (f'Here is a chatlist: {chatlist}')
+
 
 		# Ensure that chatname is uniqe
 		if chatname in chatlist:
@@ -68,9 +68,17 @@ def channel(chat_id):
 			return render_template('error.html', error=error)
 
 		else:
+			# Add new chatroom
+			newchat = Channel(chatname)
+			chatlist.append(newchat)
+			print (f'Here is a chatlist: {chatlist}')
 
-			chatlist.append(chatname)
-			messagedict[chatname] = []
+			# Dict of chatlist
+			channelsFeed = []
+			for object in chatlist:
+				channelsFeed.append(object.name)
+			return render_template("chats.html", chatlist=channelsFeed, username=session['user_name'])
+
 
 	else:
 		# Ensure if user logined in to let user in
@@ -83,7 +91,7 @@ def channel(chat_id):
 
 	return render_template("chatroom.html", username=session['user_name'], chatid=chat_id)
 
-@socketio.on("submit message")
+@socketio.on("send message")
 def message(data):
 
 	message = data["message"]
@@ -91,14 +99,5 @@ def message(data):
 
 	# Dictionary with saved messages
 
-	responce_dict = {'selection': message, 'time': time, 'user_name': session['user_name']}
-	messagelist = messagedict[chatlist[session['chat_id'] - 1]]
 
-	# Check the lenght of dict
-	if len(messagelist) == 100:
-		del messagelist[0]
-
-	# Save to the dict
-	messagelist.append(responce_dict)
-	print ("We are here!")
 	emit("cast message", {**responce_dict, **{"chat_id": str(session["chat_id"])}}, broadcast=True)
