@@ -11,11 +11,10 @@
 {% endblock %}
 
 
-	{% block main %}
+{% block main %}
 		<h1 id="main">Hello: <span id="name"></span></h1>
-		<form id="new-name">
-			<input type="text" id="input_name">
+		<form id="new-name" method="post" action="{{ url_for('username')}}">
+			<input type="text" name="input_name">
 			<input type="submit">
 		</form>
-		<button onclick="clr()">Delete!</button>
-	{% endblock %}
+{% endblock %}
