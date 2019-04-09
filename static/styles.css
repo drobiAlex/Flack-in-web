@@ -10,10 +10,8 @@ main
 
 /* Chat containers */
 .container {
-  background-color: #505151;
   border-radius: 5px;
-  /*padding: 10px;*/
-  margin: 10px 0;
+  border-color: green;
 }
 
 /* Darker chat container */
@@ -29,21 +27,6 @@ main
   /*display: table;*/
 }
 
-/* Style images */
-.container img {
-  float: left;
-  max-width: 60px;
-  width: 100%;
-  margin-right: 20px;
-  border-radius: 50%;
-}
-
-/* Style the right image */
-.container img.right {
-  float: right;
-  margin-left: 20px;
-  margin-right:0;
-}
 
 /* Style time text */
 .time-right {
@@ -62,11 +45,23 @@ main
 }
 
 .chatwindow {
-  position: absolute;
-  left: 0;
-  top: 300px;
-  right: 0;
-  bottom: 300px;
-  border: 1px solid #333;
-  overflow-y: auto;
+	height: 40em;
+ 	background-color: grey;
+	border: 1px solid gray;
+	border-radius: 5px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	overflow-y: auto;
+
+	/*text-align:left;
+    margin-bottom: 10px;
+	margin-top: 10px;
+    padding: 10px;
+	height:270px;
+    width:430px;
+    border:1px solid #ACD8F0;
+    overflow:auto;*/
+}
+.listofchats {
+	overflow-y: auto;
 }

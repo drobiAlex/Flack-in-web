@@ -1,8 +1,44 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 document.addEventListener("DOMContentLoaded", () => {
 
 	// Set user to this chat
 	/*let chat_id = {{ chatid }};
-	localStorage.setItem('chat_id', chat_id);*/
+	localStorage.setItem('chat_id', chat_id);
 
 	// Connect to web socket
 	var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
@@ -38,3 +74,4 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 	});
 });
+*/

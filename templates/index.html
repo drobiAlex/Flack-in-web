@@ -13,8 +13,8 @@
 
 {% block main %}
 		<h1 id="main">Hello: <span id="name"></span></h1>
-		<form id="new-name" method="post" action="{{ url_for('username')}}">
-			<input type="text" name="input_name">
+		<form id="new-name" method="post" action="{{ url_for('index')}}">
+			<input type="text" name="username">
 			<input type="submit">
 		</form>
 {% endblock %}

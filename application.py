@@ -1,7 +1,7 @@
 import os
 import datetime
 
-from flask import Flask, render_template, session, request
+from flask import Flask, render_template, session, request, redirect, url_for, jsonify
 from flask_socketio import SocketIO, emit
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from channels import Channel
@@ -13,91 +13,81 @@ socketio = SocketIO(app)
 users = []
 chatlist = []
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def index():
 
-	# Validate if user is in chat
-	if "user_name" in session:
-		return render_template("chats.html")
+	if request.method == 'POST':
+
+		if not request.form.get('username'):
+			return render_template("error.html", error="No nickname")
+
+		username = request.form.get('username')
+
+		# Ensure that username isn't already exist
+		if username in session:
+			return render_template("error.html", error="Username is already exist")
+
+
+		# Add new username
+		else:
+			users.append(username)
+			session['user_name'] = username
+			return render_template("chats.html")
+
+	else:
+		# Validate if user is in chat
+		if "user_name" in session:
+			return render_template("chats.html")
 
 	return render_template("index.html")
 
-#
-@app.route("/username", methods=['GET', 'POST'])
-def username():
 
-	# Read new username
-	if request.method == 'POST':
+@app.route("/chats", methods=['POST', 'GET'])
+def chats():
 
-		name = request.form.get('input_name')
+		# If user want to create a new chat
+		if request.method == 'POST':
 
-		# just for me
-		print(f'User name: {name}')
+			chatname = request.form.get('chatname')
+			chatname = chatname.strip()
 
-		# Check if username already not exist
-		if name in users:
-			error = "The username is already exist."
-			return render_template("error.html", error=error)
+			for chats in chatlist:
+				if chatname in chats.name:
+					return jsonify({
+									"responce": "Chat is already created"
+									})
 
-		#
-		else:
-			users.append(name)
-			print(f"Here is a name: {name}")
-			session['user_name'] = name
-			return render_template("chats.html", chatlist=chatlist, username=session['user_name'])
+			# Create new channel class and append to existing one
+			newchannel = Channel(chatname)
+			chatlist.append(newchannel)
 
-	# Ensure that user logined in
-	if request.method == 'GET' and 'user_name' not in session:
-		error = 'Login first'
-		return render_template("error.html", error=error)
+			chatls = []
 
-
-@app.route("/chatroom/<int:chat_id>", methods=['POST', 'GET'])
-def channel(chat_id):
-
-	if request.method == 'POST':
-
-		chatname = request.form.get('chat_name')
-
-		print (f'Here is a chatname: {chatname}')
-
-
-		# Ensure that chatname is uniqe
-		if chatname in chatlist:
-			error = 'Chatroom is already exist'
-			return render_template('error.html', error=error)
-
-		else:
-			# Add new chatroom
-			newchat = Channel(chatname)
-			chatlist.append(newchat)
-			print (f'Here is a chatlist: {chatlist}')
-
-			# Dict of chatlist
-			channelsFeed = []
+			# Create a dictionary for every object so then can be tranformed easily into JSON objects
 			for object in chatlist:
-				channelsFeed.append(object.name)
-			return render_template("chats.html", chatlist=channelsFeed, username=session['user_name'])
+				chatls.append(object.__dict__)
 
+			chatls.append({'true': 'true'})
+			return jsonify(chatls)
 
-	else:
-		# Ensure if user logined in to let user in
-		if 'user_name' not in session:
-			error = 'First login'
-			return render_template("error.html", error=error)
+		# If user promt for chatlist
+		if request.method == 'GET':
 
-	session['chat_id'] = chat_id
-	print(f'Chat id: {chat_id}')
+			chatls = []
+			for object in chatlist:
+				chatls.append(object.__dict__)
 
-	return render_template("chatroom.html", username=session['user_name'], chatid=chat_id)
+			return jsonify(chatls)
 
-@socketio.on("send message")
-def message(data):
+'''
+@socketio.on('new message')
+def new_message(data):
 
+	#Get new message
 	message = data["message"]
 	time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+	sender = session["user_name"]
 
-	# Dictionary with saved messages
 
-
-	emit("cast message", {**responce_dict, **{"chat_id": str(session["chat_id"])}}, broadcast=True)
+	#
+'''

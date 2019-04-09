@@ -1,27 +1,134 @@
 {% extends "layout.html" %}
 
+{% block js %}
+<script>
+	document.addEventListener("DOMContentLoaded", () => {
+
+		const request = new XMLHttpRequest();
+		request.open('GET', '/chats');
+		request.send();
+
+		request.onload = () =>{
+			const data = JSON.parse(request.responseText);
+			if (Object.keys(data).length > 0) {
+				data.forEach(createChat)
+			}
+		};
+
+
+});
+// Connect to web socket
+var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
+// When connected, configure buttons
+socket.on('connect', () => {
+
+		document.querySelector("#send").onclick = () => {
+			const message = document.querySelector('#message').value;
+			socket.emit('new message', {'new_message': message});
+
+		}
+	});
+
+
+	// Validate a chatname
+	function validation() {
+
+		let chatname = document.querySelector('#chatname').value;
+
+		console.log(chatname)
+
+		const request = new XMLHttpRequest();
+	    request.open('POST', '/chats');
+
+		// Add start and end points to request data.
+	    const data = new FormData();
+	    data.append('chatname', chatname);
+
+		// Send request
+		request.send(data);
+
+		request.onload = () => {
+			console.log(request.responseText);
+			const data = JSON.parse(request.responseText);
+			if (Object.keys(data).length > 1) {
+				createChat(data[(Object.keys(data).length) - 2]);
+			}
+			else {
+				chatstatus(data.responce);
+			}
+		};
+	};
+
+	// Add a new post with given responce to DOM.
+	function chatstatus(resp) {
+
+		console.log('-------')
+		// Create new element
+		const responce = document.createElement('div');
+		responce.className = 'responce';
+		responce.innerHTML = resp;
+
+		// Add responce to DOM
+		document.querySelector('#chatvalid').append(responce)
+
+	};
+
+	function createChat(data) {
+
+		console.log(data)
+		const chat = document.createElement('div');
+		chat.className = "list-group-item list-group-item-action";
+		chat.innerHTML = data.name;
+		chat.onclick = changeChat(data.name);
+
+		// Add responce to DOM
+		document.querySelector('#listofchats').append(chat)
+
+	};
+
+	function changeChat(data) {
+		console.log(data)
+	};
+
+</script>
+{% endblock %}
+
 {% block title %}
 	Messenger: Chats
 {% endblock %}
 
 {% block main %}
 
-{% if chatlist %}
-<h3>List of channels: </h3>
-	<tr>
-		{% for chat in chatlist %}
-		<li>
-		<a href="{{ url_for('channel', chat_id=loop.index)}}">{{chat}}</a>
-		</li>
-		{% endfor %}
-	</tr>
-{% endif %}
+<h1 class="display-3 font-weight-bold">Public, free and secret</h1>
 
-		<h1>Create a new channel:</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-4">
+				<h3>Create a new chat:</h3>
+			<input class="form-control" type="text" id="chatname" name="chatname" placeholder="Name of new chat">
+			<button class="btn btn-warning" onclick="validation()">Create</button>
+			<div id="chatvalid" style="color: red"></div>
+			<h3> List of channels:</h3>
+			<div class="list-group" id="listofchats">
+			</div>
+  </div>
+  	<div class="col-8">
+	  	<div class="chatwindow">
+		</div>
+	</div>
+	</div>
+	<div class="row">
+		<div class="col-4"></div>
+		<div class="col-8">
+			<div class="align-self-end" style="margin-bottom: 5px">
+				<input id="message" class="form-control" type="text" placeholder="Your input...">
+      			<button id="send" class="btn btn-success" type="submit">Send</button>
+  			</div>
+		</div>
+	</div>
+</div>
 
-		<form id="new_channel"  action="{{ url_for('channel', chat_id=chatlist | length + 1)}}" method="post">
-			<input type="text" name="chat_name" placeholder="Name of new chat">
-			<button id="submit" name="button">Create!</button>
-		</form>
+
 
 {% endblock %}
