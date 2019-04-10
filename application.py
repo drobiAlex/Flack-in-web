@@ -1,5 +1,6 @@
 import os
 import datetime
+import time
 
 from flask import Flask, render_template, session, request, redirect, url_for, jsonify
 from flask_socketio import SocketIO, emit
@@ -98,9 +99,14 @@ def new_message(data):
 
 	#Get new message
 	message = data["new_message"]
+	channel = data["channel"]
 	time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 	sender = session["user_name"]
 
-	package = {"message": message, "time":time, "sender": sender}
+	package = {"message": message, "time":time, "sender": sender, 'channel': channel}
+
+	for chat in chatlist:
+		if channel == chat.name:
+			chat.NewMessage(message, sender, channel, time)
 
 	emit("broad message", package, broadcast=True)

@@ -23,31 +23,23 @@
 
 			document.querySelector("#send").onclick = () => {
 				const message = document.querySelector('#message').value;
-				socket.emit('new message', {'new_message': message});
+				const channel = localStorage.getItem('channel');
 
+				socket.emit('new message', {'new_message': message, 'channel': channel});
+				document.querySelector('#message').value = "";
 			}
 		});
 
 	socket.on('broad message', data => {
 
-			console.log(data.message);
-			console.log(data.time);
-			console.log(data.sender);
+		// Add message
+		addMessage(data);
 
-			// Add a new post with given contents to DOM.
-            const message_template = Handlebars.compile(document.querySelector('#newmes').innerHTML);
-
-            // Create new post.
-            const message = message_template({'message': data.message, 'time': data.time, 'sender': data.sender});
-
-			console.log('====Here we are====')
-			console.log(message);
-			// Add post to DOM.
-            document.querySelector('#chatwindow').innerHTML += message;
 	});
 
 	document.addEventListener("DOMContentLoaded", () => {
 
+		// Make a request to get messages for the first time
 		const request = new XMLHttpRequest();
 		request.open('GET', '/chats');
 		request.send();
@@ -66,7 +58,11 @@
 
 				const chatname = element.innerText;
 
-				// Make a new request to get chat messages
+				//Set a chatname to a localStorage in browser
+				localStorage.setItem('channel', chatname);
+				console.log('-------');
+
+				/*// Make a new request to get chat messages
 				const request = new XMLHttpRequest ();
 				request.open("POST", "/chat");
 
@@ -80,7 +76,8 @@
 				request.onload = () => {
 					const data = JSON.parse(request.responseText);
 					console.log(data);
-				}
+				}*/
+				changeChat(chatname);
 			}
 		});
 
@@ -92,8 +89,7 @@
 
 		let chatname = document.querySelector('#chatname').value;
 
-		console.log(chatname)
-
+		// Creat new request to the chats
 		const request = new XMLHttpRequest();
 	    request.open('POST', '/chats');
 
@@ -104,6 +100,10 @@
 		// Send request
 		request.send(data);
 
+		// Delete chatname from input form
+		document.querySelector('#chatname').value = '';
+
+		// Procced data
 		request.onload = () => {
 			console.log(request.responseText);
 			const data = JSON.parse(request.responseText);
@@ -136,17 +136,52 @@
 		const chat = document.createElement('div');
 		chat.className = "list-group-item list-group-item-action";
 		chat.innerHTML = data.name;
-		chat.onclick = changeChat(data.name);
 		chat.id = 'chat_id';
 
 		// Add responce to DOM
-		document.querySelector('#listofchats').append(chat)
+		document.querySelector('#listofchats').append(chat);
 
+		// Set localStorage to current chat
+		localStorage.setItem('channel', data.name);
+
+		changeChat(data.name);
 	};
 
 	function changeChat(data) {
-		console.log(data)
+
+		const request = new XMLHttpRequest();
+		request.open("POST", "/chat");
+
+		// Append data
+		const chatdata = new FormData();
+		chatdata.append('chatname', localStorage.getItem('channel'));
+
+		request.send(chatdata);
+
+		// Crear all old messages
+		clearMessages();
+
+		request.onload = () => {
+			const data = JSON.parse(request.responseText);
+            data.forEach(addMessage);
+		}
 	};
+
+	function addMessage(data)	{
+
+		// Add a new post with given contents to DOM.
+		const message_template = Handlebars.compile(document.querySelector('#newmes').innerHTML);
+
+		// Create new post.
+		const message = message_template({'message': data.message, 'time': data.time, 'sender': data.sender});
+
+		// Add post to DOM.
+		document.querySelector('#chatwindow').innerHTML += message;
+	};
+
+	function clearMessages() {
+		document.querySelector('#chatwindow').innerHTML = "";
+	}
 
 </script>
 
