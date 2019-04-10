@@ -25,7 +25,7 @@ def index():
 		username = request.form.get('username')
 
 		# Ensure that username isn't already exist
-		if username in session:
+		if username in users:
 			return render_template("error.html", error="Username is already exist")
 
 
@@ -85,7 +85,7 @@ def chats():
 def chat():
 
 	chatname = request.form.get('chatname')
-	print (f'Chatname is {chatname}')
+	print(f'Chatname is {chatname}')
 
 	for chat in chatlist:
 		if chatname in chat.name:

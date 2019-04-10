@@ -5,13 +5,20 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
 
 <script id="newmes" type="text/x-handlebars-template">
-            <div class="package">
+<div class="contain" style="text-align: left">
+	<div class="package rounded">
                 {% raw -%}
-                    {{ message }}
-					{{ time }}
-					{{ sender }}
-                {%- endraw %}
-            </div>
+				<div class="sender">{{ sender }}</div>
+				<div class="main-text">{{ message }}</div>
+				<div class="time text-muted">{{ time }}</div>
+			{%- endraw %}
+
+		</div>
+</div>
+
+
+
+
 </script>
 
 <script>
@@ -62,25 +69,30 @@
 				localStorage.setItem('channel', chatname);
 				console.log('-------');
 
-				/*// Make a new request to get chat messages
-				const request = new XMLHttpRequest ();
-				request.open("POST", "/chat");
-
-				// Append data
-				const data = new FormData();
-				data.append('chatname', chatname);
-
-				request.send(data);
-
-				// Read data
-				request.onload = () => {
-					const data = JSON.parse(request.responseText);
-					console.log(data);
-				}*/
 				changeChat(chatname);
 			}
 		});
 
+		// By default, submit button is disabled
+        document.querySelector('#Creat').disabled = true;
+
+		// Enable button only if there is text in the input field
+		document.querySelector('#chatname').onkeyup = () => {
+			if (document.querySelector('#chatname').value.length > 0)
+				document.querySelector('#Creat').disabled = false;
+			else
+				document.querySelector('#Creat').disabled = true;
+		};
+
+		// By default, submit button is disabled
+        document.querySelector('#send').disabled = true;
+
+		document.querySelector('#message').onkeyup = () => {
+			if (document.querySelector('#message').value.length > 0)
+				document.querySelector('#send').disabled = false;
+			else
+				document.querySelector('#send').disabled = true;
+		};
 });
 
 
@@ -169,6 +181,9 @@
 
 	function addMessage(data)	{
 
+		// Check local storage to unsure that user in current chatroom
+		if (localStorage.getItem('channel') == data.channel) {
+
 		// Add a new post with given contents to DOM.
 		const message_template = Handlebars.compile(document.querySelector('#newmes').innerHTML);
 
@@ -177,6 +192,7 @@
 
 		// Add post to DOM.
 		document.querySelector('#chatwindow').innerHTML += message;
+		};
 	};
 
 	function clearMessages() {
@@ -198,9 +214,9 @@
 <div class="container">
   <div class="row">
     <div class="col-4">
-				<h3>Create a new chat:</h3>
+				<h2>Create a new chat:</h2>
 			<input class="form-control" type="text" id="chatname" name="chatname" placeholder="Name of new chat">
-			<button class="btn btn-warning" onclick="validation()">Create</button>
+			<button class="btn btn-warning" onclick="validation()" id="Creat">Create</button>
 			<div id="chatvalid" style="color: red"></div>
 			<h3> List of channels:</h3>
 			<div class="list-group" id="listofchats">
@@ -215,7 +231,7 @@
 		<div class="col-4"></div>
 		<div class="col-8">
 			<div class="align-self-end" style="margin-bottom: 5px">
-				<input id="message" class="form-control" type="text" placeholder="Your input...">
+				<input id="message" class="form-control" type="text" placeholder="Your input..." autofocus>
       			<button id="send" class="btn btn-success" type="submit">Send</button>
   			</div>
 		</div>

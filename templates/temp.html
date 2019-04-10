@@ -101,3 +101,8 @@ def message(data):
 
 
 	emit("cast message", {**responce_dict, **{"chat_id": str(session["chat_id"])}}, broadcast=True)
+
+
+	<div class="main-text">{{ message }}</div>
+	<div class="time">{{ time }}</div>
+	<div sender="sender">{{ sender }}</div>

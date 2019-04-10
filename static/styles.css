@@ -8,12 +8,6 @@ main
 
 }
 
-/* Chat containers */
-.container {
-  border-radius: 5px;
-  border-color: green;
-}
-
 /* Darker chat container */
 .income {
   border-color: #ccc;
@@ -46,7 +40,6 @@ main
 
 .chatwindow {
 	height: 40em;
- 	background-color: grey;
 	border: 1px solid gray;
 	border-radius: 5px;
 	margin-top: 20px;
@@ -62,6 +55,32 @@ main
     border:1px solid #ACD8F0;
     overflow:auto;*/
 }
+
 .listofchats {
 	overflow-y: auto;
+}
+
+.sender {
+	font-size: 1em;
+	color: #1dbb8d;
+	text-align: left;
+
+}
+
+.main-text {
+	font-size: 1.3em;
+	text-align: left;
+}
+
+.time {
+	font-size: 0.8em;
+	text-align: justify;
+}
+
+.package {
+	display: inline-block;
+	background-color: #303030;
+	border: 1px solid #1dbb8d;
+  	padding: 0.6em;
+  	margin: 10px;
 }
