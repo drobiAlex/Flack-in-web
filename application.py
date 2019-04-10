@@ -79,15 +79,28 @@ def chats():
 
 			return jsonify(chatls)
 
-'''
-@socketio.on('new message')
+
+@app.route("/chat", methods=['POST'])
+def chat():
+
+	chatname = request.form.get('chatname')
+	print (f'Chatname is {chatname}')
+
+	for chat in chatlist:
+		if chatname in chat.name:
+			return jsonify(chat.messages)
+
+
+
+
+@socketio.on("new message")
 def new_message(data):
 
 	#Get new message
-	message = data["message"]
+	message = data["new_message"]
 	time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 	sender = session["user_name"]
 
+	package = {"message": message, "time":time, "sender": sender}
 
-	#
-'''
+	emit("broad message", package, broadcast=True)

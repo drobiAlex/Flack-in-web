@@ -1,6 +1,3 @@
-{% extends "layout.html" %}
-
-{% block js %}
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
 
@@ -8,8 +5,6 @@
             <div class="package">
                 {% raw -%}
                     {{ message }}
-					{{ time }}
-					{{ sender }}
                 {%- endraw %}
             </div>
 </script>
@@ -36,14 +31,14 @@
 
 			// Add a new post with given contents to DOM.
             const message_template = Handlebars.compile(document.querySelector('#newmes').innerHTML);
+            function add_message(data) {
 
             // Create new post.
-            const message = message_template({'message': data.message, 'time': data.time, 'sender': data.sender});
+            const message = post_template({'message': data.message, 'time': data.time, 'sender': data.sender});
 
-			console.log('====Here we are====')
-			console.log(message);
 			// Add post to DOM.
-            document.querySelector('#chatwindow').innerHTML += message;
+            document.querySelector('#listofchats').innerHTML += message;
+		};
 	});
 
 	document.addEventListener("DOMContentLoaded", () => {
@@ -140,7 +135,7 @@
 		chat.id = 'chat_id';
 
 		// Add responce to DOM
-		document.querySelector('#listofchats').append(chat)
+		document.querySelector('#chatwindow').append(chat)
 
 	};
 
@@ -149,44 +144,3 @@
 	};
 
 </script>
-
-{% endblock %}
-
-{% block title %}
-	Messenger: Chats
-{% endblock %}
-
-{% block main %}
-
-<h1 class="display-3 font-weight-bold">Public, free and secret</h1>
-
-<div class="container">
-  <div class="row">
-    <div class="col-4">
-				<h3>Create a new chat:</h3>
-			<input class="form-control" type="text" id="chatname" name="chatname" placeholder="Name of new chat">
-			<button class="btn btn-warning" onclick="validation()">Create</button>
-			<div id="chatvalid" style="color: red"></div>
-			<h3> List of channels:</h3>
-			<div class="list-group" id="listofchats">
-			</div>
-  </div>
-  	<div class="col-8">
-	  	<div class="chatwindow" id="chatwindow">
-		</div>
-	</div>
-	</div>
-	<div class="row">
-		<div class="col-4"></div>
-		<div class="col-8">
-			<div class="align-self-end" style="margin-bottom: 5px">
-				<input id="message" class="form-control" type="text" placeholder="Your input...">
-      			<button id="send" class="btn btn-success" type="submit">Send</button>
-  			</div>
-		</div>
-	</div>
-</div>
-
-
-
-{% endblock %}
