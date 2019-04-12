@@ -33,7 +33,7 @@ def index():
 		else:
 			users.append(username)
 			session['user_name'] = username
-			return render_template("chats.html")
+			return render_template("chats.html", username=username)
 
 	else:
 		# Validate if user is in chat

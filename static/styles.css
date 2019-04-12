@@ -38,12 +38,12 @@ main
   /*padding-top: 25px;*/
 }
 
-.chatwindow {
+.border-bottom-0 {
 	height: 40em;
+	background-color: #282828;
 	border: 1px solid gray;
 	border-radius: 5px;
 	margin-top: 20px;
-	margin-bottom: 20px;
 	overflow-y: auto;
 
 	/*text-align:left;
@@ -67,9 +67,26 @@ main
 
 }
 
-.main-text {
-	font-size: 1.3em;
+.in_main-text {
+	font-size: 1.1em;
 	text-align: left;
+}
+
+.in_time {
+	font-size: 0.8em;
+	text-align: justify;
+}
+
+.in_sender {
+	font-size: 1em;
+	color: #1dbb8d;
+	text-align: left;
+
+}
+
+.main-text {
+	font-size: 1.1em;
+	text-align: right;
 }
 
 .time {
@@ -77,10 +94,42 @@ main
 	text-align: justify;
 }
 
-.package {
+.sender {
+	font-size: 1em;
+	color: #1dbb8d;
+	text-align: right;
+
+}
+
+.package-input {
 	display: inline-block;
 	background-color: #303030;
 	border: 1px solid #1dbb8d;
   	padding: 0.6em;
   	margin: 10px;
+}
+
+.package {
+	display: inline-block;
+	background-color: #303030;
+	border: 1px solid white;
+  	padding: 0.5em;
+  	margin: 10px;
+}
+
+.newchat {
+	padding-top: 0.3em;
+}
+
+.border-top-0 {
+	background-color: #282828;
+	border: 1px solid gray;
+	border-radius: 5px;
+	margin-top: -10px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+}
+
+.btn-success {
+	margin: 0.3em;
 }

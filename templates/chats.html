@@ -5,12 +5,29 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
 
 <script id="newmes" type="text/x-handlebars-template">
-<div class="contain" style="text-align: left">
+<div class="contain" style="text-align: right">
 	<div class="package rounded">
                 {% raw -%}
 				<div class="sender">{{ sender }}</div>
 				<div class="main-text">{{ message }}</div>
 				<div class="time text-muted">{{ time }}</div>
+			{%- endraw %}
+
+		</div>
+</div>
+
+
+
+
+</script>
+
+<script id="in_message" type="text/x-handlebars-template">
+<div class="contain" style="text-align: left">
+	<div class="package-input rounded">
+                {% raw -%}
+				<div class="in_sender">{{ sender }}</div>
+				<div class="in_main-text">{{ message }}</div>
+				<div class="in_time text-muted">{{ time }}</div>
 			{%- endraw %}
 
 		</div>
@@ -46,6 +63,8 @@
 
 	document.addEventListener("DOMContentLoaded", () => {
 
+		var nickname = "{{ username }}";
+		localStorage.setItem('nickname', nickname);
 		// Make a request to get messages for the first time
 		const request = new XMLHttpRequest();
 		request.open('GET', '/chats');
@@ -67,7 +86,6 @@
 
 				//Set a chatname to a localStorage in browser
 				localStorage.setItem('channel', chatname);
-				console.log('-------');
 
 				changeChat(chatname);
 			}
@@ -123,7 +141,7 @@
 				createChat(data[(Object.keys(data).length) - 2]);
 			}
 			else {
-				chatstatus(data.responce);
+				chatstatus(data);
 			}
 		};
 	};
@@ -131,14 +149,11 @@
 	// Add a new post with given responce to DOM.
 	function chatstatus(resp) {
 
-		console.log('-------')
-		// Create new element
-		const responce = document.createElement('div');
-		responce.className = 'responce';
-		responce.innerHTML = resp;
-
-		// Add responce to DOM
-		document.querySelector('#chatvalid').append(responce)
+		console.log(resp);
+		let responce = resp.responce;
+		console.log(responce);
+		// Alert that chat is already exist
+		alert(responce);
 
 	};
 
@@ -184,20 +199,30 @@
 		// Check local storage to unsure that user in current chatroom
 		if (localStorage.getItem('channel') == data.channel) {
 
-		// Add a new post with given contents to DOM.
-		const message_template = Handlebars.compile(document.querySelector('#newmes').innerHTML);
+			var message_template = null;
+			if (localStorage.getItem('nickname') == data.sender) {
 
-		// Create new post.
-		const message = message_template({'message': data.message, 'time': data.time, 'sender': data.sender});
+				// Add a new post with given contents to DOM.
+				message_template = Handlebars.compile(document.querySelector('#newmes').innerHTML);
+			}
 
-		// Add post to DOM.
-		document.querySelector('#chatwindow').innerHTML += message;
+			else
+				// Add a new post with given contents to DOM.
+				message_template = Handlebars.compile(document.querySelector('#in_message').innerHTML);
+
+			// Create new post.
+			const message = message_template({'message': data.message, 'time': data.time, 'sender': data.sender});
+
+			// Add post to DOM.
+			document.querySelector('#chatwindow').innerHTML += message;
 		};
 	};
 
 	function clearMessages() {
 		document.querySelector('#chatwindow').innerHTML = "";
 	}
+
+
 
 </script>
 
@@ -214,24 +239,24 @@
 <div class="container">
   <div class="row">
     <div class="col-4">
-				<h2>Create a new chat:</h2>
-			<input class="form-control" type="text" id="chatname" name="chatname" placeholder="Name of new chat">
+				<h3 class="newchat" style="text-align: left;">New chat:</h3>
+			<input class="form-control" type="text" id="chatname" name="chatname" placeholder="Name of new chat" autocomplete="off">
 			<button class="btn btn-warning" onclick="validation()" id="Creat">Create</button>
 			<div id="chatvalid" style="color: red"></div>
-			<h3> List of channels:</h3>
+			<h3 style="text-align: left;"> List of channels:</h3>
 			<div class="list-group" id="listofchats">
 			</div>
   </div>
   	<div class="col-8">
-	  	<div class="chatwindow" id="chatwindow">
+	  	<div class="border-bottom-0" id="chatwindow">
 		</div>
 	</div>
 	</div>
 	<div class="row">
 		<div class="col-4"></div>
 		<div class="col-8">
-			<div class="align-self-end" style="margin-bottom: 5px">
-				<input id="message" class="form-control" type="text" placeholder="Your input..." autofocus>
+			<div class="border-top-0" style="margin-bottom: 5px">
+				<input id="message" class="form-control" type="text" placeholder="Your input..." autofocus autocomplete="off">
       			<button id="send" class="btn btn-success" type="submit">Send</button>
   			</div>
 		</div>
