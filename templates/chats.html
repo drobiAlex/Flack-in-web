@@ -3,11 +3,6 @@
 {% block js %}
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
-<script type="text/javascript" src="/static/chats.js">
-
-</script>
-
-</script>
 
 <script id="newmes" type="text/x-handlebars-template">
 <div class="contain" style="text-align: right">
@@ -138,36 +133,36 @@
 
 });
 	// Validate a chatname
-	function validation() {
+			function validation() {
 
-		let chatname = document.querySelector('#chatname').value;
+			let chatname = document.querySelector('#chatname').value;
 
-		// Creat new request to the chats
-		const request = new XMLHttpRequest();
-	    request.open('POST', '/chats');
+			// Creat new request to the chats
+			const request = new XMLHttpRequest();
+		    request.open('POST', '/chats');
 
-		// Add start and end points to request data.
-	    const data = new FormData();
-	    data.append('chatname', chatname);
+			// Add start and end points to request data.
+		    const data = new FormData();
+		    data.append('chatname', chatname);
 
-		// Send request
-		request.send(data);
+			// Send request
+			request.send(data);
 
-		// Delete chatname from input form
-		document.querySelector('#chatname').value = '';
+			// Delete chatname from input form
+			document.querySelector('#chatname').value = '';
 
-		// Procced data
-		request.onload = () => {
-			console.log(request.responseText);
-			const data = JSON.parse(request.responseText);
-			if (Object.keys(data).length > 1) {
-				createChat(data[(Object.keys(data).length) - 2]);
-			}
-			else {
-				chatstatus(data);
-			}
+			// Procced data
+			request.onload = () => {
+				console.log(request.responseText);
+				const data = JSON.parse(request.responseText);
+				if (Object.keys(data).length > 1) {
+					createChat(data[(Object.keys(data).length) - 2]);
+				}
+				else {
+					chatstatus(data);
+				}
+			};
 		};
-	};
 
 	// Add a new post with given responce to DOM.
 	function chatstatus(resp) {
