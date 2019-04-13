@@ -51,8 +51,20 @@
 
 				socket.emit('new message', {'new_message': message, 'channel': channel});
 				document.querySelector('#message').value = "";
-			}
-		});
+			};
+
+			document.addEventListener("keypress", function(key) {
+				const message = document.querySelector('#message').value;
+				console.log('-------');
+				console.log('Cool');
+				console.log('-------');
+					if ( key.keyCode == 13 && message != '') {
+						const channel = localStorage.getItem('channel');
+						socket.emit('new message', {'new_message': message, 'channel': channel});
+						document.querySelector('#message').value = "";
+					};
+				});
+			});
 
 	socket.on('broad message', data => {
 
@@ -111,6 +123,8 @@
 			else
 				document.querySelector('#send').disabled = true;
 		};
+
+
 });
 
 
@@ -205,7 +219,6 @@
 				// Add a new post with given contents to DOM.
 				message_template = Handlebars.compile(document.querySelector('#newmes').innerHTML);
 			}
-
 			else
 				// Add a new post with given contents to DOM.
 				message_template = Handlebars.compile(document.querySelector('#in_message').innerHTML);
@@ -241,7 +254,7 @@
     <div class="col-4">
 				<h3 class="newchat" style="text-align: left;">New chat:</h3>
 			<input class="form-control" type="text" id="chatname" name="chatname" placeholder="Name of new chat" autocomplete="off">
-			<button class="btn btn-warning" onclick="validation()" id="Creat">Create</button>
+			<button class="btn btn-warning" onclick="validation()" id="Creat" style="margin: 5px">Create</button>
 			<div id="chatvalid" style="color: red"></div>
 			<h3 style="text-align: left;"> List of channels:</h3>
 			<div class="list-group" id="listofchats">
