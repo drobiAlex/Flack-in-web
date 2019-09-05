@@ -14,6 +14,8 @@ socketio = SocketIO(app)
 users = []
 chatlist = []
 
+# Hello from 2019/09/05
+
 @app.route("/", methods=['GET', 'POST'])
 def index():
 
